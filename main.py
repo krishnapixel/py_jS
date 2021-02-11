@@ -1,39 +1,16 @@
-import csv
-def readDataFromCSVFile(filename):
-    f = open(filename, newline='', encoding="utf-8")
-    h = f.readline().strip().split(",")
-    result = []
-    for line in f.readlines():
-        data = line.strip().split(",")
-        result.append(makeDictionary(h, data))
-    f.close()
-    return result
+import bottle
+import appcode
 
-def makeDictionary(key, vals):
-   result ={}
-   for i in range(len(key)):
-       result[key[i]] = vals[i]
-   return result
+@bottle.route("/")
+def any_name():
+  return bottle.static_file("index.html", root="")
 
-def dictionaryToListOfValues(k, dictionary):
-    result = []
-    for key in k:
-        result.append(dictionary[key])
-    return result
+@bottle.route("/piechart")
+def piechart():
+    return appcode.piechart()
 
-import csv
-def writeDataToCSVFile(file,data,keysoflist,boolean):
-    with open(file, 'w') as f:
-     if boolean:
-       f.write(",".join(keysoflist)+"\n")
-       for i in data:
-         result=[]
-         for key in keysoflist:
-           result.append(i[key])
-           f.write(",".join(result)+"\n")
-     
+@bottle.route("/bubblechart")
+def bubblechart():
+    return appcode.bubblechart()
 
-
-
-
-   
+bottle.run(host="0.0.0.0", port=8080, debug=True)
